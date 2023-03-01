@@ -8,6 +8,9 @@ import { Injectable } from '@angular/core';
 import { HttpService } from 'src/app/_general/services/http.service';
 import { ExtraUserData, User } from '../models/user-model';
 
+/**
+ * Authentication HTTP service, allowing user to authenticate and change passwords, etc.
+ */
 @Injectable({
   providedIn: 'root'
 })

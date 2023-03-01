@@ -8,6 +8,9 @@ import { Event, RouterEvent, Router, NavigationStart } from '@angular/router';
 import { Subject, BehaviorSubject, filter } from 'rxjs';
 import { GeneralService } from './_general/services/general.service';
 
+/**
+ * Root component for AI Expert.
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,34 +18,16 @@ import { GeneralService } from './_general/services/general.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterContentChecked {
-  title = 'Aista HUB';
 
   loading$: Subject<any> = new BehaviorSubject(true);
-  constructor(
-    public loader: GeneralService,
-    private cdr: ChangeDetectorRef,
-    private router: Router) {
 
-    /*
-     * Structure for handling referral url to be redirected to sign-up page with referrer's name as a query parameter
-     */
-    router.events.pipe(
-      filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
-    ).subscribe((e: RouterEvent) => {
-      if (e instanceof NavigationStart) {
-        if (e.url.includes('/r/')) {
-          const param: string = e.url.split("/").pop();
-          this.router.navigateByUrl('/authentication/sign-up?ref=' + param);
-        }
-      }
-    });
-  }
+  constructor(private generalService: GeneralService) { }
 
-  ngAfterContentChecked(): void {
-    this.loader.loading$.subscribe((res: any) => {
-      this.cdr.markForCheck();
+  ngAfterContentChecked() {
+
+    this.generalService.loading$.subscribe((res: any) => {
+
       this.loading$.next(res)
-      this.cdr.detectChanges();
     })
   }
 }

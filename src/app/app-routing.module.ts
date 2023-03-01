@@ -42,10 +42,6 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'r/:ref',
-    component: AuthBaseComponent
-  },
-  {
     path: '',
     component: CoreComponent,
     children: [
