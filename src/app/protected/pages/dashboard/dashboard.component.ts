@@ -33,6 +33,7 @@ export class DashboardComponent {
     if (!this.query || this.query.length === 0) {
 
       this.generalService.showFeedback('You need to supply a question', 'errorMessage');
+      return;
     }
 
 
