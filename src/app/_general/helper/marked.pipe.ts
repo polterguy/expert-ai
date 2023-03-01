@@ -17,11 +17,6 @@ import { marked } from "marked";
 })
 export class MarkedPipe implements PipeTransform {
 
-  /**
-   * Transforms Markdown to HTML, and returns to caller.
-   * 
-   * @param value Markdown to transform to HTML
-   */
   transform(value: any): any {
     if (!value || value.length === 0) {
       return '';

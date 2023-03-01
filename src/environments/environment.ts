@@ -9,9 +9,8 @@
 
 export const environment = {
   production: false,
-  bazarUrl: 'https://dev-api.aista.com/magic/modules/bazar/',
-  backendUrl: 'https://dev-api.aista.com/',
-  type: 'default',
+  backendUrl: 'http://localhost:5000/',
+  type: 'docs_aista_com',
   frontendUrl: 'http://localhost:4201/'
 };
 

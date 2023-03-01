@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { QueryService } from 'src/app/public/authentication/services/query.service';
 import { GeneralService } from 'src/app/_general/services/general.service';
+import { Reference } from './models/reference-model';
 
 /**
  * Dashboard component displaying main user interface.
@@ -20,6 +21,7 @@ export class DashboardComponent {
 
   query: string;
   answer: string = null;
+  references: Reference[] = null;
 
   constructor(
     private generalService: GeneralService,
@@ -41,6 +43,7 @@ export class DashboardComponent {
           next: (result: any) => {
 
             this.answer = result.result;
+            this.references = result.references;
           },
           error:() => {
 
