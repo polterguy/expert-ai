@@ -10,5 +10,6 @@ export const environment = {
   // Leave these as they are.
   bazarUrl: 'https://dev-api.aista.com/magic/modules/bazar/',
   backendUrl: 'https://dev-api.aista.com/',
+  type: 'default',
   frontendUrl: 'https://dev-hub.aista.com/'
 };

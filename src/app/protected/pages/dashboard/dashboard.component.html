@@ -10,13 +10,55 @@
         <mat-card-content>
 
           <div class="d-flex justify-content-between mb-4 align-items-center">
-            <h4 class="my-0 fw-bold">AI Search</h4>
+            <h4 class="my-0 fw-bold">Question</h4>
             <mat-icon>cloud_download</mat-icon>
           </div>
 
-          <p>
-            Foo
-          </p>
+          <div>
+
+            <mat-form-field class="w-100 custom-alignment">
+              <span
+                matPrefix
+                class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                <mat-icon>question_answer</mat-icon>
+                <span class="text-muted">|</span>
+              </span>
+              <textarea
+                matInput
+                cdkFocusInitial
+                placeholder="Question"
+                [(ngModel)]="query"
+                rows="10">
+              </textarea>
+            </mat-form-field>
+
+            <div class="text-end">
+              <button
+                mat-flat-button
+                (click)="ask()">
+                Ask your question
+              </button>
+            </div>
+
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+
+    <!-- Answer -->
+    <div class="col-md-12 mt-spacing" *ngIf="answer">
+
+      <mat-card class="h-100">
+        <mat-card-content>
+
+          <div class="d-flex justify-content-between mb-4 align-items-center">
+            <h4 class="my-0 fw-bold">Answer</h4>
+            <mat-icon>cloud_download</mat-icon>
+          </div>
+
+          <div [innerHTML]="answer | marked" class="text-muted mx-5"></div>
 
         </mat-card-content>
       </mat-card>
