@@ -8,4 +8,5 @@
  */
 export const CommonErrorMessages: { [key: string]: string } = {
   confirmPassword: 'Passwords must match',
+  domain: 'Domain is not valid',
 };

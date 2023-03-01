@@ -49,7 +49,10 @@ form fields
       border: none;
       color: $aista_default_grey3;
     }
-    .mat-form-field-infix {padding-top: 0.5em;}
+    .mat-form-field-infix {
+      padding-top: 0.5em;
+      width: unset;
+    }
 
     &.custom-alignment {
       .mat-form-field-flex {align-items: flex-start;}
