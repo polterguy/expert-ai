@@ -16,6 +16,10 @@ import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
+/**
+ * Authentication HTTP interceptor intercepting request to redirect to authentication
+ * page in case user is not authenticated.
+ */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
@@ -35,10 +39,9 @@ export class AuthInterceptor implements HttpInterceptor {
     return throwError(() => error);
   }
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(request: HttpRequest<unknown>, next: HttpHandler) : Observable<HttpEvent<unknown>> {
 
-    let clone: any = request;
-    return next.handle(clone)
+    return next.handle(request)
       .pipe(
         catchError(err => this.handleError(err))
       );

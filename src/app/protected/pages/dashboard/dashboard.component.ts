@@ -5,6 +5,9 @@
 
 import { Component } from '@angular/core';
 
+/**
+ * Dashboard component displaying main user interface.
+ */
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',

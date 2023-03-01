@@ -4,8 +4,10 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 
+/**
+ * Footer component for displaying footer and copyright information.
+ */
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',

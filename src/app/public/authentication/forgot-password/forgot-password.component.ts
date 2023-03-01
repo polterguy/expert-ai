@@ -5,7 +5,6 @@
 
 import { Component } from '@angular/core';
 import { Validators, UntypedFormBuilder } from '@angular/forms';
-import { CommonErrorMessages } from 'src/app/_general/classes/common-error-messages';
 import { GeneralService } from 'src/app/_general/services/general.service';
 import { AuthApiService } from '../services/auth-api.service';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
@@ -23,11 +22,6 @@ export class ForgotPasswordComponent {
    forgotPassForm = this.formBuilder.group({
     username: ['', [Validators.required]]
   });
-
-  /**
-   * handling errors
-   */
-  errors = CommonErrorMessages;
 
   /**
    * let user view the entered password

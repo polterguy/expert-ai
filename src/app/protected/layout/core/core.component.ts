@@ -5,6 +5,9 @@
 
 import { Component } from '@angular/core';
 
+/**
+ * Core component containing the prinary router outlet.
+ */
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html'

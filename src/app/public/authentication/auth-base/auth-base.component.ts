@@ -6,6 +6,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
+/**
+ * Authentication base component, being the base component for
+ * everything related to authentication.
+ */
 @Component({
   selector: 'app-auth-base',
   templateUrl: './auth-base.component.html',

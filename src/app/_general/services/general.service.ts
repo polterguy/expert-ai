@@ -7,24 +7,29 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+/**
+ * General service for displaying error messages and showing feedback to user,
+ * plus misc other helper  methods.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class GeneralService {
 
-  private _loading = new BehaviorSubject<boolean>(false);
+  private loading = new BehaviorSubject<boolean>(false);
   private largeScreen = new BehaviorSubject<boolean>(undefined!);
-  readonly loading$ = this._loading.asObservable();
+  readonly loading$ = this.loading.asObservable();
 
-  constructor(private _snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar) { }
 
   showLoading() {
 
-    this._loading.next(true);
+    this.loading.next(true);
   }
+
   hideLoading() {
 
-    this._loading.next(false);
+    this.loading.next(false);
   }
 
   showFeedback(message: string, panelClass?: string, actionButton?: string, duration?: number) {
@@ -32,9 +37,9 @@ export class GeneralService {
     if (message?.startsWith('Guru meditation')) {
       return;
     }
-    this._snackBar.open(message, actionButton, {
-      duration: duration || 2000, // if exists use it, otherwise use default
-      panelClass: [panelClass!] // if available
+    this.snackBar.open(message, actionButton, {
+      duration: duration || 2000,
+      panelClass: [panelClass!]
     });
   }
 

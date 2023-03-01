@@ -6,7 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthApiService } from 'src/app/public/authentication/services/auth-api.service';
+import { GeneralService } from './general.service';
 
+/**
+ * Authentication service allowing user to authenticate towards backend.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +18,7 @@ export class AuthService {
 
   constructor(
     private router: Router,
+    private generalService: GeneralService,
     private authApiService: AuthApiService) { }
 
   getJwtToken() {
@@ -24,8 +29,11 @@ export class AuthService {
   setJwtToken(token?: string) {
 
     if (token) {
+
       sessionStorage.setItem('token', token);
+
     } else {
+
       sessionStorage.removeItem('token');
     }
   }
@@ -34,12 +42,17 @@ export class AuthService {
 
     this.authApiService.refreshToken().subscribe({
       next: (res: any) => {
+
         if (res && res.ticket) {
+
           this.setJwtToken(res.ticket);
           this.watchForExpiration(res.ticket);
         }
       },
-      error: (error: any) => { }
+      error: () => {
+        
+        this.generalService.showFeedback('Something went bad as we tried to refresh your JWT token, please login again', 'errorMessage');
+      }
     });
   }
 
@@ -55,6 +68,7 @@ export class AuthService {
     const now = new Date();
     const fiveMinutes = 5000 * 60 * 5;
     const timeout = expiration.getTime() - now.getTime() - fiveMinutes;
+
     setTimeout(() => {
       this.refreshTicket();
     }, timeout);

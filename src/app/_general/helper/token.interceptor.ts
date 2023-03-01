@@ -15,6 +15,10 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
+/**
+ * Authentication HTTP interceptor who's purpose it is to attach the JWT token to
+ * the request before invoking the backend.
+ */
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 

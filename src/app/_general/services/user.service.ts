@@ -4,8 +4,11 @@
  */
 
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/public/authentication/models/model';
+import { User } from 'src/app/public/authentication/models/user-model';
 
+/**
+ * User service to persist user data into the current session.
+ */
 @Injectable({
   providedIn: 'root'
 })

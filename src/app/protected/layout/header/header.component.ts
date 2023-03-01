@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/_general/services/auth.service';
 import { UserService } from 'src/app/_general/services/user.service';
 
+/**
+ * Header component displaying the navbar, the logo and other header information.
+ */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

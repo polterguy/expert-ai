@@ -42,7 +42,6 @@
       padding: 0 15px 0 10px;
     }
   }
-
 }
 
 @media (max-width: 1199px) {
@@ -129,6 +128,7 @@ button.dropdown-link {
 ::ng-deep .mat-menu-panel.account-menu {
   margin-top: 10px;
   border-radius: $aista_radius;
+  min-width: 200px;
 }
 
 ::ng-deep .mat-menu-panel.account-menu button {

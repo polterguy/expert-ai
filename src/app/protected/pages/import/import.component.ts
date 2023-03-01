@@ -5,6 +5,9 @@
 
 import { Component } from '@angular/core';
 
+/**
+ * Helper component for importing training data becoming foundation of AI model.
+ */
 @Component({
   selector: 'app-import',
   templateUrl: './import.component.html',

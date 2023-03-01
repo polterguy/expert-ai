@@ -8,6 +8,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+/**
+ * HTTP helper service to invoke the backend.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -15,11 +18,14 @@ export class HttpService {
 
   constructor(private http: HttpClient) { }
 
-  get(url: string, data?: any, responseType: any = 'json'): Observable<any> {
+  get(url: string, queryParams?: string, responseType: any = 'json') : Observable<any> {
 
-    if (data) {
-      return this.http.get(environment.backendUrl + url + data, { responseType: responseType });
+    if (queryParams) {
+
+      return this.http.get(environment.backendUrl + url + queryParams, { responseType: responseType });
+
     } else {
+
       return this.http.get(environment.backendUrl + url, { responseType: responseType });
     }
   }
