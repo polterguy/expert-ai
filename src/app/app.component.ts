@@ -3,9 +3,8 @@
  * Copyright (c) Aista Ltd, 2021 - 2022 info@aista.com, all rights reserved.
  */
 
-import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Event, RouterEvent, Router, NavigationStart } from '@angular/router';
-import { Subject, BehaviorSubject, filter } from 'rxjs';
+import { AfterContentChecked, ChangeDetectionStrategy, Component } from '@angular/core';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { GeneralService } from './_general/services/general.service';
 
 /**
