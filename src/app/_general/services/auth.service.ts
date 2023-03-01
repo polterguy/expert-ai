@@ -12,23 +12,17 @@ import { AuthApiService } from 'src/app/public/authentication/services/auth-api.
 })
 export class AuthService {
 
-  public cloudletError: any;
-
   constructor(
     private router: Router,
     private authApiService: AuthApiService) { }
 
   getJwtToken() {
+
     return sessionStorage.getItem('token');
   }
 
-  /**
-   *
-   * @param token optional,
-   * if existing: to set JWT token,
-   * if not: to remove the JWT token from sessionStorage
-   */
   setJwtToken(token?: string) {
+
     if (token) {
       sessionStorage.setItem('token', token);
     } else {
@@ -37,6 +31,7 @@ export class AuthService {
   }
 
   refreshTicket() {
+
     this.authApiService.refreshToken().subscribe({
       next: (res: any) => {
         if (res && res.ticket) {
@@ -45,10 +40,11 @@ export class AuthService {
         }
       },
       error: (error: any) => { }
-    })
+    });
   }
 
   watchForExpiration(token: string) {
+
     if (!token) {
       this.router.navigateByUrl('/authentication');
       return;

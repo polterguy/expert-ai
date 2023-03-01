@@ -31,9 +31,6 @@ export class AuthInterceptor implements HttpInterceptor {
         this.router.navigateByUrl('/authentication');
       }
     }
-    if (error.url.includes('/hub/cloudlets')) {
-      this.authService.cloudletError = error;
-    }
 
     return throwError(() => error);
   }

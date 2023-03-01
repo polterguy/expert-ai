@@ -35,7 +35,12 @@ export class TokenInterceptor implements HttpInterceptor {
     ) as Observable<HttpEvent<any>>;
   }
 
+  /*
+   * Private helper methods.
+   */
+
   private addToken(request: HttpRequest<any>, token: string) {
+
     return request.clone({
       setHeaders: {
         'Authorization': `Bearer ${token}`

@@ -21,15 +21,8 @@ export class NetworkInterceptor implements HttpInterceptor {
   constructor(private generalService: GeneralService) { }
 
   intercept(request: HttpRequest<Response>, next: HttpHandler): Observable<HttpEvent<Response>> {
-    /**
-     * displaying loading progress bar
-     * will be triggered on all http requests
-     */
     this.generalService.showLoading();
 
-    /**
-     * TODO::: correction of error messages
-     */
     return next.handle(request)
       .pipe(
         map(res => {
@@ -37,14 +30,12 @@ export class NetworkInterceptor implements HttpInterceptor {
         }),
         catchError((error: HttpErrorResponse) => {
           let errorMsg = '';
-
           errorMsg = error.error.message || "Guru meditation, come back when Universe is in order!";
           this.generalService.showFeedback(errorMsg)
 
           return throwError(() => new Error(errorMsg))
         }),
         finalize(() => {
-          // hide the loading progress bar
           this.generalService.hideLoading();
         }));
   }

@@ -44,50 +44,6 @@
   }
 
 }
-.bell-button {
-  position: relative;
-  &.isOpen::before {
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #FFFFFF;
-    position: absolute;
-    top: 100%;
-    left: 10px;
-    z-index: 9999999;
-  }
-  &.hasUnread mat-icon {
-    position: relative;
-
-    &::after {
-      position: absolute;
-      z-index: 2;
-      content: ' ';
-      width: 5px;
-      height: 5px;
-      right: 5px;
-      top: 6px;
-      border-radius: 50%;
-      background-color: $aista_error;
-    }
-
-    &::before {
-      position: absolute;
-      z-index: 1;
-      content: ' ';
-      width: 10px;
-      height: 10px;
-      right: 2.5px;
-      top: 3.5px;
-      border-radius: 50%;
-      background-color: $aista_default;
-    }
-  }
-
-}
 
 @media (max-width: 1199px) {
   #navbar {
@@ -145,7 +101,10 @@
     z-index: 998;
   }
 }
-.logout-btn {background-color: transparentize($color: $aista_error, $amount: 0.8);border-radius: $aista_radius_sm;}
+.logout-btn {
+  background-color: transparentize($color: $aista_error, $amount: 0.8);
+  border-radius: $aista_radius_sm;
+}
 button.dropdown-link {
   background-color: transparent !important;
   @include general_transition(0.3s);
@@ -174,43 +133,6 @@ button.dropdown-link {
 
 ::ng-deep .mat-menu-panel.account-menu button {
   padding-right: 50px;
-}
-
-
-::ng-deep .mat-menu-panel.notifications-menu {
-  margin-top: 10px;
-  margin-right: -10px;
-  border-radius: $aista_radius;
-  width: 485px;
-  max-width: 90vw;
-  padding: 20px;
-  @media (max-width: 319px) {
-    max-width: 80vw;
-  }
-
-  .mat-menu-content {
-    overflow: auto;
-    padding-right: 20px;
-    margin-right: -13px;
-    max-height: 400px;
-    @include scrollbar($aista_default_alt, $aista_default_grey4, 3px);
-  }
-
-  // &::before {
-  //   width: 0;
-  //   height: 0;
-  //   border-left: 10px solid transparent;
-  //   border-right: 10px solid transparent;
-  //   border-bottom: 10px solid $aista_default;
-  //   content: ' ';
-  //   position: absolute;
-  //   top: 0px;
-  //   right: 15px;
-  // }
-}
-
-::ng-deep .cdk-overlay-backdrop.notifications-backdrop {
-  background-color: transparentize($color: $aista_dark, $amount: 0.5);
 }
 
 .coloured-box {
