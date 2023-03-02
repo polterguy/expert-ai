@@ -65,6 +65,7 @@
 
     <a
       mat-button
+      *ngIf="isRoot()"
       class="nav-link"
       routerLink="/import"
       [routerLinkActiveOptions]="{exact: false}"

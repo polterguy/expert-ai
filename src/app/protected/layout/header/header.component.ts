@@ -49,4 +49,10 @@ export class HeaderComponent {
     this.router.navigate(['authentication']);
     sessionStorage.clear();
   }
+
+  isRoot() {
+
+    const role = this.userService.getUserData().role;
+    return role && (role === 'root' || role.indexOf('root') !== -1);
+  }
 }
