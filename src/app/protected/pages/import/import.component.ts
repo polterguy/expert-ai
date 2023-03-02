@@ -91,9 +91,19 @@ export class ImportComponent implements OnDestroy {
       this.messages.push(args);
       this.doneCrawling = args.type === 'success' || args.type === 'error';
 
-      if (args.type === 'success') {
+      if (args.type === 'done_crawling') {
 
-        this.generalService.showFeedback('Done creating bot', 'successMessage');
+        this.generalService.showFeedback('Done crawling site', 'successMessage');
+        this.openAIService.vectorise(environment.type).subscribe({
+          next: () => {
+
+            //this.generalService.showFeedback('Importing and generating ');
+          },
+          error: () => {
+    
+            this.generalService.showFeedback('Something went wrong as we tried to start vectorising your model', 'errorMessage');
+          }
+        });
 
       } else if (args.type === 'error') {
 
@@ -124,7 +134,7 @@ export class ImportComponent implements OnDestroy {
           },
           error: () => {
     
-            this.generalService.showFeedback('Something went wrong as we tried to start training', 'errorMessage');
+            this.generalService.showFeedback('Something went wrong as we tried to start crawling your site', 'errorMessage');
           }
         });
     });
