@@ -9,6 +9,15 @@ mat-icon {
   color: #828282;
 }
 
+::ng-deep .marked img {
+  display: block;
+  max-width: calc(100% - 40px);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .references {
   padding: 10px 0 0 0;
   li {
