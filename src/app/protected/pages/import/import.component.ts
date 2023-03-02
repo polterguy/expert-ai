@@ -97,7 +97,11 @@ export class ImportComponent implements OnDestroy {
         this.openAIService.vectorise(environment.type).subscribe({
           next: () => {
 
-            //this.generalService.showFeedback('Importing and generating ');
+            console.log({
+              message: 'Done crawling site',
+              url: this.url,
+              model: environment.type,
+            })
           },
           error: () => {
     
