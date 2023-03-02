@@ -54,6 +54,7 @@
 
     <a
       mat-button
+      *ngIf="isRoot()"
       class="nav-link"
       routerLink="/"
       [routerLinkActiveOptions]="{exact: true}"
