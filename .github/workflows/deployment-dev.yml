@@ -1,0 +1,32 @@
+
+# Builds and publishes new DEV Docker images to Docker hub when master is updated
+
+name: Builds and publishes new DEV Docker images to Docker hub when master is updated
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and push Docker CI images
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker build -t aistamagic/expert:latest-ci -f ./Dockerfile .
+        docker push aistamagic/expert:latest-ci
+
+    - name: Updating Docker images on DEV machine
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.DEPLOYMENT_KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd magic.deploy
+          docker-compose down
+          docker pull aistamagic/expert:latest-ci
+          docker pull aistamagic/expert:latest-ci
+          docker-compose up -d
