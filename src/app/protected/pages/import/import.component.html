@@ -3,10 +3,9 @@
 
   <div class="row">
 
-    <!-- Import -->
+    <!-- Scrape website form -->
     <div class="col-md-6 col-12 mt-spacing">
 
-      <!-- Scrape website form -->
       <mat-card class="h-100">
         <mat-card-content>
 
@@ -123,9 +122,9 @@
 
     </div>
 
+    <!-- Upload form -->
     <div class="col-md-6 col-12 mt-spacing">
 
-      <!-- Upload form -->
       <mat-card class="h-100">
         <mat-card-content>
 
@@ -212,6 +211,48 @@
           </div>
       
         </mat-card-content>
+      </mat-card>
+
+    </div>
+
+    <div class="col-12 mt-spacing" *ngIf="showCrawler">
+
+      <mat-card class="h-100">
+        <mat-card-content>
+
+          <div class="d-flex justify-content-between mb-4 align-items-center">
+            <h4 class="my-0 fw-bold">Crawling</h4>
+          </div>
+
+          <div class="col-12">
+
+            <p class="text-muted text-small mb-3">
+              Crawling {{url}} to create machine learning model, please wait
+            </p>
+
+          </div>
+
+          <div class="row" class="mt-4 mb-3 messages">
+
+            <div
+              *ngFor="let idx of messages; index as i"
+              [class]="'msg ' + idx.type"
+              [id]="'m_' + i">{{idx.message}}</div>
+      
+          </div>
+
+          <div class="text-end">
+
+            <button
+              mat-button
+              (click)="closeCrawler()">
+              Close
+            </button>
+
+          </div>
+      
+        </mat-card-content>
+
       </mat-card>
 
     </div>

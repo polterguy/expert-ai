@@ -18,7 +18,7 @@ import { environment } from 'src/environments/environment';
 })
 export class CoreComponent implements OnInit, OnDestroy {
 
-  hubConnection: HubConnection;
+  hubConnection: HubConnection = null;
 
   constructor(
     private authService: AuthService,

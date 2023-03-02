@@ -3,8 +3,10 @@
  * Copyright (c) Aista Ltd, 2021 - 2022 info@aista.com, all rights reserved.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { CommonErrorMessages } from 'src/app/_general/classes/common-error-messages';
+import { AuthService } from 'src/app/_general/services/auth.service';
 import { GeneralService } from 'src/app/_general/services/general.service';
 import { OpenAIService } from 'src/app/_general/services/openai.service';
 import { environment } from 'src/environments/environment';
@@ -18,8 +20,9 @@ import { CommonRegEx } from '../../../_general/classes/common-regex';
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.scss']
 })
-export class ImportComponent {
+export class ImportComponent implements OnDestroy {
 
+  hubConnection: HubConnection = null;
   uploading: boolean = false;
   trainingFileModel: string = '';
   url: string = null;
@@ -29,14 +32,23 @@ export class ImportComponent {
   completion: string = 'completion';
   advanced: boolean = false;
   threshold: number = 150;
+  showCrawler: boolean = false;
+  messages: any[] = [];
+  doneCrawling: boolean = false;
 
   CommonRegEx = CommonRegEx;
   CommonErrorMessages = CommonErrorMessages;
 
   constructor(
+    private authService: AuthService,
     private openAIService: OpenAIService,
     private generalService: GeneralService) { }
 
+  ngOnDestroy() {
+
+    this.hubConnection?.stop();
+  }
+  
   importUrl() {
 
     if (!this.url ||
@@ -46,42 +58,82 @@ export class ImportComponent {
       this.threshold < 25 ||
       !this.CommonRegEx.domain.test(this.url)) {
 
-    this.generalService.showFeedback('Not valid input', 'errorMessage');
-    return;
-  }
+      this.generalService.showFeedback('Not valid input', 'errorMessage');
+      return;
+    }
 
-  if (this.url.endsWith('/')) {
-    this.url = this.url.substring(0, this.url.length - 1);
-  }
+    if (this.url.endsWith('/')) {
+      this.url = this.url.substring(0, this.url.length - 1);
+    }
 
-  const splits = this.url.split('://');
-  if (splits[0] !== 'http' && splits[0] !== 'https' && splits.length !== 2) {
+    const splits = this.url.split('://');
+    if (splits[0] !== 'http' && splits[0] !== 'https' && splits.length !== 2) {
 
-    this.generalService.showFeedback('Provide a domain name with its http(s) prefix', 'errorMessage');
-    return;
-  }
-  if (splits[1].includes('/')) {
+      this.generalService.showFeedback('Provide a domain name with its http(s) prefix', 'errorMessage');
+      return;
+    }
+    if (splits[1].includes('/')) {
 
-    this.generalService.showFeedback('For now we only support domains', 'errorMessage');
-    return;
-  }
+      this.generalService.showFeedback('For now we only support domains', 'errorMessage');
+      return;
+    }
 
-  this.openAIService.importUrl(
-    this.url,
-    environment.type,
-    this.delay * 1000,
-    this.max,
-    this.threshold).subscribe({
-      next: () => {
+    let builder = new HubConnectionBuilder();
+    this.hubConnection = builder.withUrl(environment.backendUrl + 'sockets', {
+      accessTokenFactory: () => this.authService.getJwtToken(),
+      skipNegotiation: true,
+      transport: HttpTransportType.WebSockets,
+    }).build();
 
-        this.generalService.showFeedback('Crawling started, you will be notified when it is finished', 'successMessage');
-      },
-      error: () => {
+    this.hubConnection.on('magic.backend.chatbot', (args) => {
 
-        this.generalService.showFeedback('Something went wrong as we tried to start training', 'errorMessage');
+      args = JSON.parse(args);
+      this.messages.push(args);
+      this.doneCrawling = args.type === 'success' || args.type === 'error';
+
+      if (args.type === 'success') {
+
+        this.generalService.showFeedback('Done creating bot', 'successMessage');
+
+      } else if (args.type === 'error') {
+
+        this.generalService.showFeedback('Something went wrong when creating your bot', 'errorMessage');
       }
+      setTimeout(() => {
+
+        const domEl = document.getElementById('m_' + (this.messages.length - 1));
+        if (domEl) {
+
+          domEl.scrollIntoView();
+        }
+      }, 50);
     });
-}
+
+    this.hubConnection.start().then(() => {
+
+      this.showCrawler = true;
+      this.openAIService.importUrl(
+        this.url,
+        environment.type,
+        this.delay * 1000,
+        this.max,
+        this.threshold).subscribe({
+          next: () => {
+    
+            this.generalService.showFeedback('Crawling started, you will be notified when it is finished', 'successMessage');
+          },
+          error: () => {
+    
+            this.generalService.showFeedback('Something went wrong as we tried to start training', 'errorMessage');
+          }
+        });
+    });
+  }
+
+  closeCrawler() {
+
+    this.showCrawler = false;
+  }
 
   getFile(event: any) {
 
