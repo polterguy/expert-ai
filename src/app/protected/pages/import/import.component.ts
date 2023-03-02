@@ -66,16 +66,21 @@ export class ImportComponent {
     return;
   }
 
-  this.openAIService.importUrl(this.url, environment.type, this.delay * 1000, this.max, this.threshold).subscribe({
-    next: () => {
+  this.openAIService.importUrl(
+    this.url,
+    environment.type,
+    this.delay * 1000,
+    this.max,
+    this.threshold).subscribe({
+      next: () => {
 
-      this.generalService.showFeedback('Crawling started, you will be notified when it is finished', 'successMessage');
-    },
-    error: () => {
+        this.generalService.showFeedback('Crawling started, you will be notified when it is finished', 'successMessage');
+      },
+      error: () => {
 
-      this.generalService.showFeedback('Something went wrong as we tried to start training', 'errorMessage');
-    }
-  });
+        this.generalService.showFeedback('Something went wrong as we tried to start training', 'errorMessage');
+      }
+    });
 }
 
   getFile(event: any) {
@@ -98,7 +103,6 @@ export class ImportComponent {
         this.uploading = false;
         this.generalService.showFeedback(`${result.count} training snippets successfully uploaded`, 'successMessage');
 
-        // Giving user some time to register feedback.
         setTimeout(() => {
 
           this.trainingFileModel = '';

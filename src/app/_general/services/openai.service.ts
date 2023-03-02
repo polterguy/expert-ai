@@ -60,4 +60,11 @@ export class OpenAIService {
       id,
     });
   }
+
+  createBot(url: string) {
+
+    return this.httpService.post('/magic/system/openai/create-bot', {
+      url,
+    });
+  }
 }
