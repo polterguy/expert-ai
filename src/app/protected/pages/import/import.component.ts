@@ -35,6 +35,9 @@ export class ImportComponent implements OnDestroy {
   showCrawler: boolean = false;
   messages: any[] = [];
   doneCrawling: boolean = false;
+  files: FileList = null;
+  uploadIndex: number = 0;
+  uploadCount: number = 0;
 
   CommonRegEx = CommonRegEx;
   CommonErrorMessages = CommonErrorMessages;
@@ -154,11 +157,29 @@ export class ImportComponent implements OnDestroy {
     if (!event || !event.target.files || event.target.files.length === 0) {
       return;
     }
-
     this.uploading = true;
+    this.uploadIndex = 0;
+    this.uploadCount = 0;
+    this.files = event.target.files;
+    this.uploadCurrentFile();
+  }
+
+  getFileName() {
+
+    if (!this.files || this.files.length === 0 || this.uploadIndex >= this.files.length) {
+      return '';
+    }
+    return this.files[this.uploadIndex].name;
+  }
+
+  /*
+   * Private helper methods.
+   */
+
+  uploadCurrentFile() {
 
     const formData = new FormData();
-    formData.append('file', event.target.files[0], event.target.files[0].name);
+    formData.append('file', this.files[this.uploadIndex], this.files[this.uploadIndex].name);
     formData.append('type', environment.type);
     formData.append('prompt', this.prompt);
     formData.append('completion', this.completion);
@@ -166,13 +187,23 @@ export class ImportComponent implements OnDestroy {
     this.openAIService.uploadTrainingFile(formData).subscribe({
       next: (result: any) => {
 
-        this.uploading = false;
-        this.generalService.showFeedback(`${result.count} training snippets successfully uploaded`, 'successMessage');
+        this.uploadCount += result.count;
 
         setTimeout(() => {
 
-          this.trainingFileModel = '';
-        }, 1000);
+          if (this.uploadIndex >= (this.files.length - 1)) {
+            this.generalService.showFeedback(`${this.uploadCount} training snippets successfully imported`, 'successMessage');
+            this.uploading = false;
+            this.trainingFileModel = '';
+            this.uploadIndex = 0;
+            this.files = null;
+            return;
+          }
+
+          // More files remaining.
+          this.uploadIndex += 1;
+          this.uploadCurrentFile();
+        }, 100);
       },
       error: (error: any) => {
 
@@ -182,10 +213,5 @@ export class ImportComponent implements OnDestroy {
         this.generalService.hideLoading();
       }
     });
-  }
-
-  getFileName() {
-
-    return this.trainingFileModel.split('\\').pop().split('/').pop();
   }
 }
