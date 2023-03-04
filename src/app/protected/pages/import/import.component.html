@@ -32,6 +32,7 @@
                 <input
                   matInput
                   placeholder="Website URL"
+                  [disabled]="uploading"
                   [(ngModel)]="url"
                   [pattern]="CommonRegEx.domain"
                   name="url"
@@ -57,6 +58,7 @@
                     matInput
                     placeholder="Delay"
                     [(ngModel)]="delay"
+                    [disabled]="uploading"
                     type="number"
                     min="1"
                     max="30"
@@ -76,6 +78,7 @@
                   <input
                     matInput
                     placeholder="Max URLs"
+                    [disabled]="uploading"
                     [(ngModel)]="max"
                     type="number"
                     min="1"
@@ -97,6 +100,7 @@
                     matInput
                     placeholder="Text length threshold"
                     [(ngModel)]="threshold"
+                    [disabled]="uploading"
                     type="number"
                     min="25"
                     max="500"
@@ -107,6 +111,7 @@
         
                 <button
                   class="px-3"
+                  [disabled]="uploading"
                   mat-flat-button>
                   Start
                 </button>
@@ -153,6 +158,7 @@
               <input
                 matInput
                 placeholder="Prompt field"
+                [disabled]="uploading"
                 [(ngModel)]="prompt"
                 autocomplete="off">
             </mat-form-field>
@@ -168,6 +174,7 @@
               <input
                 matInput
                 placeholder="Completion field"
+                [disabled]="uploading"
                 [(ngModel)]="completion"
                 autocomplete="off">
             </mat-form-field>
@@ -183,6 +190,7 @@
                 [(ngModel)]="trainingFileModel"
                 name="trainingFileModel"
                 class="w-100 h-100 hide pointer"
+                [disabled]="uploading"
                 #upload
                 multiple
                 (change)="getFile($event)"
@@ -192,6 +200,7 @@
                 mat-button
                 class="w-100"
                 (click)="upload.click()"
+                [disabled]="uploading"
                 *ngIf="trainingFileModel === ''"
                 [disabled]="uploading">
                 <i class="d-sm-inline d-none text-muted">

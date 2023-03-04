@@ -97,20 +97,7 @@ export class ImportComponent implements OnDestroy {
       if (args.type === 'done_crawling') {
 
         this.generalService.showFeedback('Done crawling site', 'successMessage');
-        this.openAIService.vectorise(environment.type).subscribe({
-          next: () => {
-
-            console.log({
-              message: 'Done crawling site',
-              url: this.url,
-              model: environment.type,
-            })
-          },
-          error: () => {
-    
-            this.generalService.showFeedback('Something went wrong as we tried to start vectorising your model', 'errorMessage');
-          }
-        });
+        this.vectoriseModel();
 
       } else if (args.type === 'error') {
 
@@ -176,7 +163,7 @@ export class ImportComponent implements OnDestroy {
    * Private helper methods.
    */
 
-  uploadCurrentFile() {
+  private uploadCurrentFile() {
 
     const formData = new FormData();
     formData.append('file', this.files[this.uploadIndex], this.files[this.uploadIndex].name);
@@ -191,17 +178,19 @@ export class ImportComponent implements OnDestroy {
 
         setTimeout(() => {
 
-          if (this.uploadIndex >= (this.files.length - 1)) {
-            this.generalService.showFeedback(`${this.uploadCount} training snippets successfully imported`, 'successMessage');
+          // Incrementing upload index
+          this.uploadIndex += 1;
+          if (this.uploadIndex >= this.files.length) {
+            this.generalService.showFeedback(`${this.uploadCount} training snippets successfully imported, vectorising model now`, 'successMessage');
             this.uploading = false;
             this.trainingFileModel = '';
             this.uploadIndex = 0;
             this.files = null;
+            this.vectoriseModel();
             return;
           }
 
           // More files remaining.
-          this.uploadIndex += 1;
           this.uploadCurrentFile();
         }, 100);
       },
@@ -214,4 +203,22 @@ export class ImportComponent implements OnDestroy {
       }
     });
   }
+
+  private vectoriseModel() {
+
+    this.openAIService.vectorise(environment.type).subscribe({
+      next: () => {
+
+        console.log({
+          message: 'Done crawling site',
+          url: this.url,
+          model: environment.type,
+        });
+      },
+      error: () => {
+
+        this.generalService.showFeedback('Something went wrong as we tried to start vectorising your model', 'errorMessage');
+      }
+    });
+}
 }
