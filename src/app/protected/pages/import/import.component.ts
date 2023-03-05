@@ -220,5 +220,5 @@ export class ImportComponent implements OnDestroy {
         this.generalService.showFeedback('Something went wrong as we tried to start vectorising your model', 'errorMessage');
       }
     });
-}
+  }
 }
