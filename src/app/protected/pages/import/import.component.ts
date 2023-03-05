@@ -3,7 +3,7 @@
  * Copyright (c) Aista Ltd, 2021 - 2022 info@aista.com, all rights reserved.
  */
 
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { CommonErrorMessages } from 'src/app/_general/classes/common-error-messages';
 import { AuthService } from 'src/app/_general/services/auth.service';
@@ -20,16 +20,18 @@ import { CommonRegEx } from '../../../_general/classes/common-regex';
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.scss']
 })
-export class ImportComponent implements OnDestroy {
+export class ImportComponent implements OnInit, OnDestroy {
 
   hubConnection: HubConnection = null;
   uploading: boolean = false;
   trainingFileModel: string = '';
+  trainingFileModelPdf: string = '';
   url: string = null;
   delay: number = 2;
   max: number = 200;
   prompt: string = 'prompt';
   completion: string = 'completion';
+  massage: string = 'Turn the following information into a one line title and a one paragraph summary: ';
   advanced: boolean = false;
   threshold: number = 150;
   showCrawler: boolean = false;
@@ -46,6 +48,14 @@ export class ImportComponent implements OnDestroy {
     private authService: AuthService,
     private openAIService: OpenAIService,
     private generalService: GeneralService) { }
+
+  ngOnInit() {
+
+    const massage = localStorage.getItem('massage');
+    if (massage) {
+      this.massage = massage;
+    }
+  }
 
   ngOnDestroy() {
 
@@ -151,6 +161,19 @@ export class ImportComponent implements OnDestroy {
     this.uploadCurrentFile();
   }
 
+  getFilePdf(event: any) {
+
+    if (!event || !event.target.files || event.target.files.length === 0) {
+      return;
+    }
+    this.uploading = true;
+    this.uploadIndex = 0;
+    this.uploadCount = 0;
+    this.files = event.target.files;
+    localStorage.setItem('massage', this.massage);
+    this.uploadCurrentFile(this.massage);
+  }
+
   getFileName() {
 
     if (!this.files || this.files.length === 0 || this.uploadIndex >= this.files.length) {
@@ -163,13 +186,16 @@ export class ImportComponent implements OnDestroy {
    * Private helper methods.
    */
 
-  private uploadCurrentFile() {
+  private uploadCurrentFile(massage: string = null) {
 
     const formData = new FormData();
     formData.append('file', this.files[this.uploadIndex], this.files[this.uploadIndex].name);
     formData.append('type', environment.type);
     formData.append('prompt', this.prompt);
     formData.append('completion', this.completion);
+    if (massage) {
+      formData.append('massage', massage);
+    }
 
     this.openAIService.uploadTrainingFile(formData).subscribe({
       next: (result: any) => {
@@ -184,6 +210,7 @@ export class ImportComponent implements OnDestroy {
             this.generalService.showFeedback(`${this.uploadCount} training snippets successfully imported, vectorising model now`, 'successMessage');
             this.uploading = false;
             this.trainingFileModel = '';
+            this.trainingFileModelPdf = '';
             this.uploadIndex = 0;
             this.files = null;
             this.vectoriseModel();
@@ -191,13 +218,14 @@ export class ImportComponent implements OnDestroy {
           }
 
           // More files remaining.
-          this.uploadCurrentFile();
+          this.uploadCurrentFile(massage);
         }, 100);
       },
       error: (error: any) => {
 
         this.uploading = false;
         this.trainingFileModel = '';
+        this.trainingFileModelPdf = '';
         this.generalService.showFeedback(error?.error?.message, 'errorMessage', 'Ok');
         this.generalService.hideLoading();
       }

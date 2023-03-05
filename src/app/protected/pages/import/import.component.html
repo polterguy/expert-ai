@@ -4,222 +4,301 @@
   <div class="row">
 
     <!-- Scrape website form -->
-    <div class="col-md-6 col-12 mt-spacing">
+    <div class="col-12 mt-spacing">
 
       <mat-card class="h-100">
         <mat-card-content>
 
-          <div class="d-flex justify-content-between mb-4 align-items-center">
-            <h4 class="my-0 fw-bold">Scrape website</h4>
-          </div>
+          <mat-tab-group
+            mat-stretch-tabs
+            dynamicHeight
+            animationDuration="0ms">
 
-          <form (ngSubmit)="importUrl()" class="row">
+            <mat-tab>
 
-            <div class="col-12">
+              <ng-template mat-tab-label>
+                Crawl website
+              </ng-template>
 
-              <p class="text-muted text-small mb-3">
-                Crawl and scrape the specified website for training data
-              </p>
+              <form (ngSubmit)="importUrl()" class="row">
 
-              <mat-form-field class="standalone-field w-100">
-                <span
-                  matPrefix
-                  matTooltip="Root URL to crawl for training data"
-                  class="d-flex flex-nowrap align-items-center justify-content-between me-2">
-                  <mat-icon>http</mat-icon>
-                  <span class="text-muted">|</span>
-                </span>
-                <input
-                  matInput
-                  placeholder="Website URL"
-                  [disabled]="uploading"
-                  [(ngModel)]="url"
-                  [pattern]="CommonRegEx.domain"
-                  name="url"
-                  autocomplete="off">
-                  <mat-error>{{CommonErrorMessages.domain}}</mat-error>
-              </mat-form-field>
+                <div class="col-12">
+
+                  <p class="text-muted text-small mb-3 mt-4">
+                    Crawl and scrape the specified website for training data
+                  </p>
+
+                  <mat-form-field class="standalone-field w-100">
+                    <span
+                      matPrefix
+                      matTooltip="Root URL to crawl for training data"
+                      class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                      <mat-icon>http</mat-icon>
+                      <span class="text-muted">|</span>
+                    </span>
+                    <input
+                      matInput
+                      placeholder="Website URL"
+                      [disabled]="uploading"
+                      [(ngModel)]="url"
+                      [pattern]="CommonRegEx.domain"
+                      name="url"
+                      autocomplete="off">
+                      <mat-error>{{CommonErrorMessages.domain}}</mat-error>
+                  </mat-form-field>
+              
+                </div>
+            
+                <div class="col-12">
+            
+                  <div class="d-flex justify-content-md-between align-items-md-baseline align-items-end flex-md-row w-100">
+            
+                    <mat-form-field class="standalone-field me-2 w-100">
+                      <span
+                        matPrefix
+                        matTooltip="Delay in seconds between pages"
+                        class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                        <mat-icon>hourglass_empty</mat-icon>
+                        <span class="text-muted">|</span>
+                      </span>
+                      <input
+                        matInput
+                        placeholder="Delay"
+                        [(ngModel)]="delay"
+                        [disabled]="uploading"
+                        type="number"
+                        min="1"
+                        max="30"
+                        step="1"
+                        name="delay"
+                        autocomplete="off">
+                    </mat-form-field>
+            
+                    <mat-form-field class="standalone-field me-2 w-100">
+                      <span
+                        matPrefix
+                        matTooltip="Maximum number of URLs to crawl"
+                        class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                        <mat-icon>exit_to_app</mat-icon>
+                        <span class="text-muted">|</span>
+                      </span>
+                      <input
+                        matInput
+                        placeholder="Max URLs"
+                        [disabled]="uploading"
+                        [(ngModel)]="max"
+                        type="number"
+                        min="1"
+                        max="5000"
+                        step="1"
+                        name="max"
+                        autocomplete="off">
+                    </mat-form-field>
+            
+                    <mat-form-field class="standalone-field me-2 w-100">
+                      <span
+                        matPrefix
+                        matTooltip="Minimum character count for completions"
+                        class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                        <mat-icon>timeline</mat-icon>
+                        <span class="text-muted">|</span>
+                      </span>
+                      <input
+                        matInput
+                        placeholder="Text length threshold"
+                        [(ngModel)]="threshold"
+                        [disabled]="uploading"
+                        type="number"
+                        min="25"
+                        max="500"
+                        step="25"
+                        name="threshold"
+                        autocomplete="off">
+                    </mat-form-field>
+            
+                    <button
+                      class="px-3"
+                      [disabled]="uploading"
+                      mat-flat-button>
+                      Start
+                    </button>
+            
+                  </div>
+              
+                </div>
+            
+              </form>
+
+            </mat-tab>
+
+            <mat-tab>
+
+              <ng-template mat-tab-label>
+                Import structured files
+              </ng-template>
+
+              <div class="col-12">
+    
+                <p class="text-muted text-small mb-3 mt-4">
+                  Upload XML, YAML, JSON or CSV training data files
+                </p>
+    
+              </div>
+    
+              <div class="col-12 d-flex justify-content-md-between align-items-md-center align-items-end flex-md-row">
+    
+                <mat-form-field class="w-100 standalone-field me-2">
+                  <span
+                    matPrefix
+                    matTooltip="Prompt field"
+                    class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                    <mat-icon>help_outline</mat-icon>
+                    <span class="text-muted">|</span>
+                  </span>
+                  <input
+                    matInput
+                    placeholder="Prompt field"
+                    [disabled]="uploading"
+                    [(ngModel)]="prompt"
+                    autocomplete="off">
+                </mat-form-field>
+            
+                <mat-form-field class="w-100 standalone-field">
+                  <span
+                    matPrefix
+                    matTooltip="Completion field"
+                    class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                    <mat-icon>edit</mat-icon>
+                    <span class="text-muted">|</span>
+                  </span>
+                  <input
+                    matInput
+                    placeholder="Completion field"
+                    [disabled]="uploading"
+                    [(ngModel)]="completion"
+                    autocomplete="off">
+                </mat-form-field>
           
-            </div>
-        
-            <div class="col-12">
-        
-              <div class="d-flex justify-content-md-between align-items-md-baseline align-items-end flex-md-row w-100">
-        
-                <mat-form-field class="standalone-field me-2 w-100">
-                  <span
-                    matPrefix
-                    matTooltip="Delay in seconds between pages"
-                    class="d-flex flex-nowrap align-items-center justify-content-between me-2">
-                    <mat-icon>hourglass_empty</mat-icon>
-                    <span class="text-muted">|</span>
-                  </span>
-                  <input
-                    matInput
-                    placeholder="Delay"
-                    [(ngModel)]="delay"
-                    [disabled]="uploading"
-                    type="number"
-                    min="1"
-                    max="30"
-                    step="1"
-                    name="delay"
-                    autocomplete="off">
-                </mat-form-field>
-        
-                <mat-form-field class="standalone-field me-2 w-100">
-                  <span
-                    matPrefix
-                    matTooltip="Maximum number of URLs to crawl"
-                    class="d-flex flex-nowrap align-items-center justify-content-between me-2">
-                    <mat-icon>exit_to_app</mat-icon>
-                    <span class="text-muted">|</span>
-                  </span>
-                  <input
-                    matInput
-                    placeholder="Max URLs"
-                    [disabled]="uploading"
-                    [(ngModel)]="max"
-                    type="number"
-                    min="1"
-                    max="5000"
-                    step="1"
-                    name="max"
-                    autocomplete="off">
-                </mat-form-field>
-        
-                <mat-form-field class="standalone-field me-2 w-100">
-                  <span
-                    matPrefix
-                    matTooltip="Minimum character count for completions"
-                    class="d-flex flex-nowrap align-items-center justify-content-between me-2">
-                    <mat-icon>timeline</mat-icon>
-                    <span class="text-muted">|</span>
-                  </span>
-                  <input
-                    matInput
-                    placeholder="Text length threshold"
-                    [(ngModel)]="threshold"
-                    [disabled]="uploading"
-                    type="number"
-                    min="25"
-                    max="500"
-                    step="25"
-                    name="threshold"
-                    autocomplete="off">
-                </mat-form-field>
-        
-                <button
-                  class="px-3"
-                  [disabled]="uploading"
-                  mat-flat-button>
-                  Start
-                </button>
-        
               </div>
           
-            </div>
+              <div class="col-12 mt-2">
+            
+                <div class="drop-container pointer border-color">
+          
+                  <input
+                    type="file"
+                    [(ngModel)]="trainingFileModel"
+                    name="trainingFileModel"
+                    class="w-100 h-100 hide pointer"
+                    [disabled]="uploading"
+                    #upload
+                    multiple
+                    (change)="getFile($event)"
+                    accept=".csv,.xml,.yaml,.yml,.json">
+          
+                  <button
+                    mat-button
+                    class="w-100"
+                    (click)="upload.click()"
+                    [disabled]="uploading"
+                    *ngIf="trainingFileModel === ''"
+                    [disabled]="uploading">
+                    <i class="d-sm-inline d-none text-muted">
+                      Drag & drop your training data files here, CSV, XML, JSON or YAML
+                    </i>
+                    <br />
+                    <span class="text-primary">Choose files</span>
+                  </button>
+          
+                  <ng-container *ngIf="trainingFileModel !== ''">
+                    <h4 class="my-0">{{getFileName()}}</h4>
+                    <p class="text-center mt-3" *ngIf="uploading">Uploading {{uploadIndex + 1}} of {{files.length}}...</p>
+                    <p class="text-center mt-3" *ngIf="!uploading">Done!</p>
+                  </ng-container>
+          
+                </div>
+    
+              </div>
+    
+            </mat-tab>
         
-          </form>
+            <mat-tab>
+
+              <ng-template mat-tab-label>
+                Import PDF files
+              </ng-template>
+
+              <div class="col-12">
+    
+                <p class="text-muted text-small mb-3 mt-4">
+                  Upload PDF training data files
+                </p>
+    
+              </div>
+    
+              <div class="col-12 d-flex justify-content-md-between align-items-md-center align-items-end flex-md-row">
+            
+                <mat-form-field class="w-100 standalone-field">
+                  <span
+                    matPrefix
+                    matTooltip="Massage value used to modify content"
+                    class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                    <mat-icon>edit</mat-icon>
+                    <span class="text-muted">|</span>
+                  </span>
+                  <input
+                    matInput
+                    placeholder="Massage value"
+                    [disabled]="uploading"
+                    [(ngModel)]="massage"
+                    autocomplete="off">
+                </mat-form-field>
+          
+              </div>
+          
+              <div class="col-12 mt-2">
+            
+                <div class="drop-container pointer border-color">
+          
+                  <input
+                    type="file"
+                    [(ngModel)]="trainingFileModelPdf"
+                    name="trainingFileModelPdf"
+                    class="w-100 h-100 hide pointer"
+                    [disabled]="uploading"
+                    #uploadPdf
+                    multiple
+                    (change)="getFilePdf($event)"
+                    accept=".csv,.xml,.yaml,.yml,.json,.pdf">
+          
+                  <button
+                    mat-button
+                    class="w-100"
+                    (click)="uploadPdf.click()"
+                    [disabled]="uploading"
+                    *ngIf="trainingFileModelPdf === ''"
+                    [disabled]="uploading">
+                    <i class="d-sm-inline d-none text-muted">
+                      Drag & drop your PDF training data files here
+                    </i>
+                    <br />
+                    <span class="text-primary">Choose files</span>
+                  </button>
+          
+                  <ng-container *ngIf="trainingFileModelPdf !== ''">
+                    <h4 class="my-0">{{getFileName()}}</h4>
+                    <p class="text-center mt-3" *ngIf="uploading">Uploading {{uploadIndex + 1}} of {{files.length}}...</p>
+                    <p class="text-center mt-3" *ngIf="!uploading">Done!</p>
+                  </ng-container>
+          
+                </div>
+    
+              </div>
+    
+            </mat-tab>
+
+          </mat-tab-group>
         
-        </mat-card-content>
-      </mat-card>
-
-    </div>
-
-    <!-- Upload form -->
-    <div class="col-md-6 col-12 mt-spacing">
-
-      <mat-card class="h-100">
-        <mat-card-content>
-
-          <div class="d-flex justify-content-between mb-4 align-items-center">
-            <h4 class="my-0 fw-bold">Import files</h4>
-          </div>
-
-          <div class="col-12">
-
-            <p class="text-muted text-small mb-3">
-              Upload training data files
-            </p>
-
-          </div>
-
-          <div class="col-12 d-flex justify-content-md-between align-items-md-center align-items-end flex-md-row">
-
-            <mat-form-field class="w-100 standalone-field me-2">
-              <span
-                matPrefix
-                matTooltip="Prompt field"
-                class="d-flex flex-nowrap align-items-center justify-content-between me-2">
-                <mat-icon>help_outline</mat-icon>
-                <span class="text-muted">|</span>
-              </span>
-              <input
-                matInput
-                placeholder="Prompt field"
-                [disabled]="uploading"
-                [(ngModel)]="prompt"
-                autocomplete="off">
-            </mat-form-field>
-        
-            <mat-form-field class="w-100 standalone-field">
-              <span
-                matPrefix
-                matTooltip="Completion field"
-                class="d-flex flex-nowrap align-items-center justify-content-between me-2">
-                <mat-icon>edit</mat-icon>
-                <span class="text-muted">|</span>
-              </span>
-              <input
-                matInput
-                placeholder="Completion field"
-                [disabled]="uploading"
-                [(ngModel)]="completion"
-                autocomplete="off">
-            </mat-form-field>
-      
-          </div>
-      
-          <div class="col-12 mt-2">
-        
-            <div class="drop-container pointer border-color">
-      
-              <input
-                type="file"
-                [(ngModel)]="trainingFileModel"
-                name="trainingFileModel"
-                class="w-100 h-100 hide pointer"
-                [disabled]="uploading"
-                #upload
-                multiple
-                (change)="getFile($event)"
-                accept=".csv,.xml,.yaml,.yml,.json,.pdf">
-      
-              <button
-                mat-button
-                class="w-100"
-                (click)="upload.click()"
-                [disabled]="uploading"
-                *ngIf="trainingFileModel === ''"
-                [disabled]="uploading">
-                <i class="d-sm-inline d-none text-muted">
-                  Drag & drop your training data here, CSV, XML, JSON, PDF or YAML
-                </i>
-                <br />
-                <span class="text-primary">Choose a file</span>
-              </button>
-      
-              <ng-container *ngIf="trainingFileModel !== ''">
-                <h4 class="my-0">{{getFileName()}}</h4>
-                <p class="text-center mt-3" *ngIf="uploading">Uploading {{uploadIndex + 1}} of {{files.length}}...</p>
-                <p class="text-center mt-3" *ngIf="!uploading">Done!</p>
-              </ng-container>
-      
-            </div>
-        
-          </div>
-      
         </mat-card-content>
       </mat-card>
 

@@ -9,6 +9,6 @@ export const environment = {
   // The next parts are dynamically substituted during deployments to production.
   // Leave these as they are.
   backendUrl: 'https://dev-api.aista.com/',
-  type: 'docs_aista_com',
+  type: 'default',
   frontendUrl: 'https://dev-hub.aista.com/'
 };

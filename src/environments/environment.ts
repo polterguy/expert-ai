@@ -10,7 +10,7 @@
 export const environment = {
   production: false,
   backendUrl: 'http://localhost:5000/',
-  type: 'docs_aista_com',
+  type: 'default',
   frontendUrl: 'http://localhost:4201/'
 };
 
