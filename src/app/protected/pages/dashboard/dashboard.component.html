@@ -9,7 +9,7 @@
       <mat-card class="h-100">
         <mat-card-content>
 
-          <div class="d-flex justify-content-between mb-4 align-items-center">
+          <div class="d-flex justify-content-between mb-2 align-items-center">
             <h4 class="my-0 fw-bold">Question</h4>
           </div>
 
@@ -24,6 +24,7 @@
               </span>
               <textarea
                 matInput
+                [disabled]="isLoading"
                 cdkFocusInitial
                 placeholder="Question"
                 [(ngModel)]="query"
@@ -32,11 +33,25 @@
             </mat-form-field>
 
             <div class="text-end">
+
               <button
                 mat-flat-button
-                (click)="ask()">
-                Ask your question
+                color="primary"
+                [disabled]="isLoading"
+                [matMenuTriggerFor]="menu">
+                Query model
+                <mat-icon>keyboard_arrow_down</mat-icon>
               </button>
+
+              <mat-menu #menu="matMenu">
+
+                <button
+                  *ngFor="let idx of models"
+                  (click)="prompt(idx.type)"
+                  mat-menu-item>{{idx.type}}</button>
+
+              </mat-menu>
+
             </div>
 
           </div>
@@ -47,16 +62,26 @@
     </div>
 
     <!-- Answer -->
-    <div class="col-md-7 col-12 mt-spacing" *ngIf="answer">
+    <div class="col-md-8 col-12 mt-spacing" *ngIf="answer">
 
-      <mat-card class="h-100">
+      <mat-card class="h-100 answer-card">
         <mat-card-content>
 
-          <div class="d-flex justify-content-between mb-4 align-items-center">
+          <div class="d-flex justify-content-between mb-2 align-items-center">
             <h4 class="my-0 fw-bold">Answer</h4>
           </div>
 
           <div class="marked twxt-muted" [innerHTML]="answer | marked"></div>
+
+          <div class="text-end">
+
+            <button
+              mat-button
+              (click)="copyResult()">
+              Copy
+            </button>
+
+          </div>
 
         </mat-card-content>
       </mat-card>
@@ -64,12 +89,12 @@
     </div>
 
     <!-- References -->
-    <div class="col-md-5 col-12 mt-spacing" *ngIf="references">
+    <div class="col-md-4 col-12 mt-spacing" *ngIf="references">
 
       <mat-card class="h-100">
         <mat-card-content>
 
-          <div class="d-flex justify-content-between mb-4 align-items-center">
+          <div class="d-flex justify-content-between mb-2 align-items-center">
             <h4 class="my-0 fw-bold">References</h4>
           </div>
 

@@ -5,10 +5,11 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { QueryService } from 'src/app/public/authentication/services/query.service';
 import { CommonErrorMessages } from 'src/app/_general/classes/common-error-messages';
 import { AuthService } from 'src/app/_general/services/auth.service';
 import { GeneralService } from 'src/app/_general/services/general.service';
-import { OpenAIService } from 'src/app/_general/services/openai.service';
+import { MachineLearningService } from 'src/app/_general/services/machine-learning.service';
 import { environment } from 'src/environments/environment';
 import { CommonRegEx } from '../../../_general/classes/common-regex';
 
@@ -40,16 +41,30 @@ export class ImportComponent implements OnInit, OnDestroy {
   files: FileList = null;
   uploadIndex: number = 0;
   uploadCount: number = 0;
+  models: any[] = [];
+  model: string = null;
 
   CommonRegEx = CommonRegEx;
   CommonErrorMessages = CommonErrorMessages;
 
   constructor(
     private authService: AuthService,
-    private openAIService: OpenAIService,
+    private queryService: QueryService,
+    private openAIService: MachineLearningService,
     private generalService: GeneralService) { }
 
   ngOnInit() {
+
+    this.queryService.models().subscribe({
+      next: (result: any[]) => {
+
+        this.models = result;
+      },
+
+      error: () => {
+        this.generalService.showFeedback('Something went wrong as we tried to retrieve models from backend', 'errorMessage');
+      }
+    });
 
     const massage = localStorage.getItem('massage');
     if (massage) {
@@ -128,7 +143,7 @@ export class ImportComponent implements OnInit, OnDestroy {
       this.showCrawler = true;
       this.openAIService.importUrl(
         this.url,
-        environment.type,
+        this.model,
         this.delay * 1000,
         this.max,
         this.threshold).subscribe({
@@ -190,7 +205,7 @@ export class ImportComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
     formData.append('file', this.files[this.uploadIndex], this.files[this.uploadIndex].name);
-    formData.append('type', environment.type);
+    formData.append('type', this.model);
     formData.append('prompt', this.prompt);
     formData.append('completion', this.completion);
     if (massage) {
@@ -234,13 +249,13 @@ export class ImportComponent implements OnInit, OnDestroy {
 
   private vectoriseModel() {
 
-    this.openAIService.vectorise(environment.type).subscribe({
+    this.openAIService.vectorise(this.model).subscribe({
       next: () => {
 
         console.log({
           message: 'Done crawling site',
           url: this.url,
-          model: environment.type,
+          model: this.model,
         });
       },
       error: () => {

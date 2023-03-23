@@ -5,7 +5,6 @@
 
 import { Injectable } from '@angular/core';
 import { HttpService } from 'src/app/_general/services/http.service';
-import { environment } from 'src/environments/environment';
 
 /**
  * Authentication HTTP service, allowing user to authenticate and change passwords, etc.
@@ -17,14 +16,26 @@ export class QueryService {
 
   constructor(private httpService: HttpService) { }
 
-  query(prompt: string, recaptcha_response: string) {
+  /**
+   * Returns all models from your backend.
+   */
+  models() {
+
+    return this.httpService.get('magic/system/magic/ml_types');
+  }
+
+  /**
+   * Invokes model with the specified promptand the given captcha token.
+   */
+  query(model: string, prompt: string, recaptcha_response: string) {
 
     let query = '?prompt=' + encodeURIComponent(prompt);
-    query += '&type=' + encodeURIComponent(environment.type);
+    query += '&type=' + encodeURIComponent(model);
     query += '&references=true';
     query += '&chat=true';
+    query += '&session=sdfoujgsdf'; // TODO: FIX!!
     query += '&recaptcha_response=' + encodeURIComponent(recaptcha_response);
 
-    return this.httpService.get('magic/system/openai/prompt', query);
+    return this.httpService.get('magic/system/openai/chat', query);
   }
 }

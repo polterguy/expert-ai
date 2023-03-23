@@ -10,8 +10,6 @@
 export const environment = {
   production: false,
   backendUrl: 'http://localhost:5000/',
-  type: 'default',
-  frontendUrl: 'http://localhost:4201/'
 };
 
 /*

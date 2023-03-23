@@ -8,7 +8,7 @@ import { Subject, BehaviorSubject } from 'rxjs';
 import { GeneralService } from './_general/services/general.service';
 
 /**
- * Root component for AI Expert.
+ * Root component for AI Expert System.
  */
 @Component({
   selector: 'app-root',
@@ -27,6 +27,6 @@ export class AppComponent implements AfterContentChecked {
     this.generalService.loading$.subscribe((res: any) => {
 
       this.loading$.next(res)
-    })
+    });
   }
 }
