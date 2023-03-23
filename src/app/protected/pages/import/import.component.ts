@@ -29,7 +29,7 @@ export class ImportComponent implements OnInit, OnDestroy {
   trainingFileModelPdf: string = '';
   url: string = null;
   delay: number = 2;
-  max: number = 500;
+  max: number = 200;
   prompt: string = 'prompt';
   completion: string = 'completion';
   massage: string = 'Turn the following information into a one line title and a one paragraph summary: ';
@@ -82,7 +82,7 @@ export class ImportComponent implements OnInit, OnDestroy {
     if (!this.url ||
       this.url.length === 0 ||
       this.delay < 1 ||
-      this.max > 2500 ||
+      this.max > 600 ||
       this.threshold < 25 ||
       !this.CommonRegEx.domain.test(this.url)) {
 
