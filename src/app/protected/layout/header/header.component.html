@@ -76,6 +76,14 @@
       Import
     </a>
 
+    <a
+      mat-button
+      *ngIf="isRoot()"
+      class="nav-link"
+      (click)="closeSidebarInSidePanel(); openDashboard();">
+      Cloudlet
+    </a>
+
     <!-- ONLY to be displayed on medium size screens and smaller -->
     <div class="d-md-none d-block mt-auto">
 

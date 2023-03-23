@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/_general/services/auth.service';
 import { UserService } from 'src/app/_general/services/user.service';
+import { environment } from 'src/environments/environment';
 
 /**
  * Header component displaying the navbar, the logo and other header information.
@@ -54,5 +55,11 @@ export class HeaderComponent {
 
     const role = this.userService.getUserData().role;
     return role && (role === 'root' || role.indexOf('root') !== -1);
+  }
+
+  openDashboard() {
+
+    const url =`${environment.cloudletUrl}/authentication/auto-auth?url=${encodeURIComponent(window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':5000' : ''))}&token=${this.authService.getJwtToken()}&username=${this.userService.getUserData().username}`
+    window.open(url, '_blank');
   }
 }

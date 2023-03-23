@@ -9,4 +9,5 @@ export const environment = {
   // The next parts are dynamically substituted during deployments to production.
   // Leave these as they are.
   backendUrl: '/',
+  cloudletUrl: 'https://dashboard.aista.com',
 };
