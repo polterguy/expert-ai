@@ -9,19 +9,20 @@
         <mat-card-content>
 
           <div class="d-flex justify-content-between mb-2 align-items-center">
-            <h4 class="my-0 fw-bold">Model</h4>
+            <h4 class="my-0 fw-bold">Choose model</h4>
           </div>
 
           <mat-form-field class="w-100 standalone-field">
             <span
               matPrefix
+              matTooltip="Choose model to import to"
               class="d-flex flex-nowrap align-items-center justify-content-between me-2">
               <mat-icon>filter_list</mat-icon>
               <span class="text-muted ms-1">|</span>
             </span>
             <mat-select
               [(ngModel)]="model"
-              matTooltip="Choose model to import to">
+              placeholder="Model ...">
               <mat-option
                 *ngFor="let idx of models"
                 [value]="idx.type">{{idx.type}}</mat-option>
@@ -339,7 +340,7 @@
       <mat-card class="h-100">
         <mat-card-content>
 
-          <div class="d-flex justify-content-between mb-4 align-items-center">
+          <div class="d-flex justify-content-between mb-2 align-items-center">
             <h4 class="my-0 fw-bold">Crawling</h4>
           </div>
 
@@ -364,6 +365,7 @@
 
             <button
               mat-button
+              [disabled]="!doneCrawling"
               (click)="closeCrawler()">
               Close
             </button>

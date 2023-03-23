@@ -29,7 +29,7 @@ export class ImportComponent implements OnInit, OnDestroy {
   trainingFileModelPdf: string = '';
   url: string = null;
   delay: number = 2;
-  max: number = 200;
+  max: number = 500;
   prompt: string = 'prompt';
   completion: string = 'completion';
   massage: string = 'Turn the following information into a one line title and a one paragraph summary: ';
@@ -105,6 +105,9 @@ export class ImportComponent implements OnInit, OnDestroy {
       this.generalService.showFeedback('For now we only support domains', 'errorMessage');
       return;
     }
+
+    this.messages = [];
+    this.hubConnection?.stop();
 
     let builder = new HubConnectionBuilder();
     this.hubConnection = builder.withUrl(environment.backendUrl + 'sockets', {
