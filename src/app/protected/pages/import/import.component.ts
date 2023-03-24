@@ -32,7 +32,7 @@ export class ImportComponent implements OnInit, OnDestroy {
   max: number = 200;
   prompt: string = 'prompt';
   completion: string = 'completion';
-  massage: string = 'Turn the following information into a one line title and a one paragraph summary: ';
+  massage: string = '';
   advanced: boolean = false;
   threshold: number = 150;
   showCrawler: boolean = false;
