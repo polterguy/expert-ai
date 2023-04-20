@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) Aista Ltd, 2021 - 2022 info@aista.com, all rights reserved.
+ * Copyright (c) Arta-Marketing AS, 2023 team@ainiro.io, all rights reserved.
  */
 
 export const environment = {
@@ -9,5 +9,5 @@ export const environment = {
   // The next parts are dynamically substituted during deployments to production.
   // Leave these as they are.
   backendUrl: '/',
-  cloudletUrl: 'https://dashboard.aista.com',
+  cloudletUrl: 'https://dashboard.aioniro.io',
 };
