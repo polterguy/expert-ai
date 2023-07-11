@@ -179,7 +179,7 @@ export class ImportComponent implements OnInit, OnDestroy {
     this.uploadCurrentFile();
   }
 
-  getFilePdf(event: any) {
+  getUnStructuredFile(event: any) {
 
     if (!event || !event.target.files || event.target.files.length === 0) {
       return;
