@@ -17,6 +17,14 @@ export class QueryService {
   constructor(private httpService: HttpService) { }
 
   /**
+   * Returns a new unique session identifier.
+   */
+  createSession() {
+
+    return this.httpService.get('magic/system/misc/gibberish');
+  }
+
+  /**
    * Returns all models from your backend.
    */
   models() {
@@ -27,7 +35,7 @@ export class QueryService {
   /**
    * Invokes model with the specified promptand the given captcha token.
    */
-  query(model: string, prompt: string, recaptcha_response: string) {
+  query(model: string, prompt: string, recaptcha_response: string, session: string) {
 
     let query = '?prompt=' + encodeURIComponent(prompt);
     query += '&type=' + encodeURIComponent(model);
@@ -35,6 +43,7 @@ export class QueryService {
     query += '&chat=true';
     query += '&session=sdfoujgsdf'; // TODO: FIX!!
     query += '&recaptcha_response=' + encodeURIComponent(recaptcha_response);
+    query += '&session=' + encodeURIComponent(session);
 
     return this.httpService.get('magic/system/openai/chat', query);
   }

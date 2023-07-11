@@ -28,6 +28,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   answer: string = null;
   references: Reference[] = null;
   models: any[] = [];
+  model: string = null;
+  session: string = null;
 
   constructor(
     private clipboard: Clipboard,
@@ -43,10 +45,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.loading$.next(res);
     });
 
-    this.queryService.models().subscribe({
-      next: (result: any[]) => {
+    this.queryService.createSession().subscribe({
 
-        this.models = result;
+      next: (result: any) => {
+
+        this.session= result.result;
+
+        this.queryService.models().subscribe({
+          next: (result: any[]) => {
+    
+            this.models = result;
+          },
+    
+          error: () => {
+            this.generalService.showFeedback('Something went wrong as we tried to retrieve models from backend', 'errorMessage');
+          }
+        });
       },
 
       error: () => {
@@ -60,6 +74,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.loadingSubscription?.unsubscribe();
   }
 
+  modelChanged() {
+
+    this.queryService.createSession().subscribe({
+
+      next: (result: any) => {
+
+        this.session= result.result;
+      },
+
+      error: () => {
+        this.generalService.showFeedback('Something went wrong as we tried to retrieve models from backend', 'errorMessage');
+      }
+    });
+  }
+
   prompt(model: string) {
 
     if (!this.query || this.query.length === 0) {
@@ -71,7 +100,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.recaptchaV3Service.execute('formSubmission').subscribe({
       next: (token) => {
 
-        this.queryService.query(model, this.query, token).subscribe({
+        this.queryService.query(model, this.query, token, this.session).subscribe({
           next: (result: any) => {
 
             this.answer = result.result;

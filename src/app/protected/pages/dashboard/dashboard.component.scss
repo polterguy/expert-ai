@@ -23,6 +23,17 @@ button mat-icon {
   margin-bottom: 20px;
 }
 
+.dashboard {
+  .search {
+    .model-selector {
+      width: 300px;
+    }
+    .query-model {
+      width: 150px;
+    }
+  }
+}
+
 .references {
   padding: 0;
   margin: 0;

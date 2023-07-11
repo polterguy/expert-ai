@@ -4,7 +4,7 @@
   <div class="row">
 
     <!-- Search -->
-    <div class="col-md-12 mt-spacing">
+    <div class="col-md-12 mt-spacing search">
 
       <mat-card class="h-100">
         <mat-card-content>
@@ -14,7 +14,7 @@
           </div>
 
           <div>
-
+  
             <mat-form-field class="w-100 custom-alignment">
               <span
                 matPrefix
@@ -34,23 +34,32 @@
 
             <div class="text-end">
 
+              <mat-form-field class="me-3 model-selector">
+                <span
+                  matPrefix
+                  matTooltip="Choose model"
+                  class="d-flex flex-nowrap align-items-center justify-content-between me-2">
+                  <mat-icon>filter_list</mat-icon>
+                  <span class="text-muted ms-1">|</span>
+                </span>
+                <mat-select
+                  [(ngModel)]="model"
+                  (selectionChange)="modelChanged()"
+                  placeholder="Model ...">
+                  <mat-option
+                    *ngFor="let idx of models"
+                    [value]="idx.type">{{idx.type}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+  
               <button
+                class="query-model"
                 mat-flat-button
                 color="primary"
-                [disabled]="isLoading"
-                [matMenuTriggerFor]="menu">
-                Query model
-                <mat-icon>keyboard_arrow_down</mat-icon>
+                [disabled]="isLoading || !model"
+                (click)="prompt(model)">
+                Ask
               </button>
-
-              <mat-menu #menu="matMenu">
-
-                <button
-                  *ngFor="let idx of models"
-                  (click)="prompt(idx.type)"
-                  mat-menu-item>{{idx.type}}</button>
-
-              </mat-menu>
 
             </div>
 
