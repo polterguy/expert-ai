@@ -58,6 +58,10 @@
     animation-duration: .25s;
     animation-fill-mode: forwards;
     animation-timing-function: ease-in-out;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    width: 100%;
+    text-wrap: nowrap;
   }
 
   .success {

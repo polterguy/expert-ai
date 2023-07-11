@@ -189,7 +189,48 @@ export class ImportComponent implements OnInit, OnDestroy {
     this.uploadCount = 0;
     this.files = event.target.files;
     localStorage.setItem('massage', this.massage);
-    this.uploadCurrentFile(this.massage);
+
+    // Starting socket connection.
+    this.messages = [];
+    this.hubConnection?.stop();
+
+    let builder = new HubConnectionBuilder();
+    this.hubConnection = builder.withUrl(environment.backendUrl + 'sockets', {
+      accessTokenFactory: () => this.authService.getJwtToken(),
+      skipNegotiation: true,
+      transport: HttpTransportType.WebSockets,
+    }).build();
+
+    this.hubConnection.on('magic.backend.chatbot', (args) => {
+
+      args = JSON.parse(args);
+      this.messages.push(args);
+      this.doneCrawling = args.type === 'success' || args.type === 'error';
+
+      if (args.type === 'done_crawling') {
+
+        this.generalService.showFeedback('Done crawling site', 'successMessage');
+        this.vectoriseModel();
+
+      } else if (args.type === 'error') {
+
+        this.generalService.showFeedback('Something went wrong when creating your bot', 'errorMessage');
+      }
+      setTimeout(() => {
+
+        const domEl = document.getElementById('m_' + (this.messages.length - 1));
+        if (domEl) {
+
+          domEl.scrollIntoView();
+        }
+      }, 50);
+    });
+
+    this.hubConnection.start().then(() => {
+
+      this.showCrawler = true;
+      this.uploadCurrentFile(this.massage);
+    });
   }
 
   getFileName() {
@@ -225,7 +266,7 @@ export class ImportComponent implements OnInit, OnDestroy {
           // Incrementing upload index
           this.uploadIndex += 1;
           if (this.uploadIndex >= this.files.length) {
-            this.generalService.showFeedback(`${this.uploadCount} training snippets successfully imported, vectorising model now`, 'successMessage');
+            this.generalService.showFeedback(`Please wait while we import your file(s)`, 'successMessage');
             this.uploading = false;
             this.trainingFileModel = '';
             this.trainingFileModelPdf = '';
